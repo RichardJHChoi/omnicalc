@@ -10,14 +10,16 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    @text_without_spaces = @text.gsub(" ","")
+    @text_without_special = @text.gsub(@special_word,"")
+    
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text_without_spaces.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @character_count_with_spaces - @character_count_without_spaces + 1
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
+    @occurrences = (@character_count_with_spaces - @text_without_special.length) / @special_word.length
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +40,10 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_apr = (@apr / 12 / 100).to_f
+    @months = @years * 12
+    
+    @monthly_payment = ((1 + @monthly_apr) ** @months * @principal) * @monthly_apr / ((1 + @monthly_apr)**@months -1)
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +65,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds / 60
+    @hours = @minutes / 60
+    @days = @hours / 24
+    @weeks = @days / 7
+    @years = @days / 365
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +87,35 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @sorted_numbers[0]
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @sorted_numbers[@count - 1]
 
-    @range = "Replace this string with your answer."
+    @range = @minimum.to_s + " to " + @maximum.to_s
 
-    @median = "Replace this string with your answer."
+    @median = (@sorted_numbers[@count/2] + @sorted_numbers[(@count-1)/2])/2
 
-    @sum = "Replace this string with your answer."
+    @sum = @numbers.reduce(:+)
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum / @count
 
-    @variance = "Replace this string with your answer."
+    @difsqrd = 0
+    @numbers.each do |i|
+        @difsqrd+= (@mean - i)**2 
+    end
+    @variance=@difsqrd/@count
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation = @variance**0.5
+    
+    
 
-    @mode = "Replace this string with your answer."
+    count = @sorted_numbers.inject(Hash.new(0)) {|time,n| time[n]+=1; time}
+    @mode = @sorted_numbers.max_by{|n| count[n]}
+
 
     # ================================================================================
     # Your code goes above.
